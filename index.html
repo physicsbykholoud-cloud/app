@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مس خلود حمودة · Physics</title>
+<meta name="description" content="متابعة طلاب الصف الثالث الثانوي: الدرجات والحضور والمصاريف">
+<meta name="theme-color" content="#102a43">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="مس خلود">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: one centered column (max 600px). Ink hero band with the brand, a search card that floats over its edge,
+   then stacked cards. Inner pages swap the hero for a slim sticky bar. Physics-lab feel: ink + copper wire. */
+:root {
+  --bg: #eef2f6;
+  --surface: #ffffff;
+  --surface-2: #f5f8fb;
+  --fg: #13202f;
+  --muted: #5a6878;
+  --line: #dbe2ea;
+  --ink: #102a43;
+  --ink-2: #1a3d5f;
+  --on-ink: #f2f6fa;
+  --on-ink-muted: #a9bfd4;
+  --copper: #c8692c;
+  --copper-text: #a4501b;
+  --copper-soft: #f8e9dd;
+  --good: #1c9b58; --good-bg: #e1f4e9; --good-fg: #0f6537;
+  --warn: #e2a400; --warn-bg: #fcf2cf; --warn-fg: #7a5800;
+  --bad: #d9443f;  --bad-bg: #fde3e1;  --bad-fg: #a0221e;
+  --none: #b4bec9; --none-bg: #edf1f5; --none-fg: #5a6878;
+  --track: #e5eaf0;
+  --shadow: 0 1px 2px rgba(16, 42, 67, .06), 0 10px 28px rgba(16, 42, 67, .09);
+  --font-display: "Cairo", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+  --radius: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1520; --surface: #132130; --surface-2: #182a3b; --fg: #e5edf5; --muted: #9babbd; --line: #24384c;
+    --ink: #0b1f33; --ink-2: #143657; --on-ink: #eef4fa; --on-ink-muted: #95b0c9;
+    --copper: #e3874b; --copper-text: #eda06f; --copper-soft: #3a2415;
+    --good: #35c27c; --good-bg: #113321; --good-fg: #84e2b0;
+    --warn: #f0bd2c; --warn-bg: #362b0c; --warn-fg: #f6d576;
+    --bad: #f0645f;  --bad-bg: #3c1919;  --bad-fg: #f8a6a2;
+    --none: #4f6073; --none-bg: #1b2b3c; --none-fg: #9babbd;
+    --track: #213346;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 28px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1520; --surface: #132130; --surface-2: #182a3b; --fg: #e5edf5; --muted: #9babbd; --line: #24384c;
+  --ink: #0b1f33; --ink-2: #143657; --on-ink: #eef4fa; --on-ink-muted: #95b0c9;
+  --copper: #e3874b; --copper-text: #eda06f; --copper-soft: #3a2415;
+  --good: #35c27c; --good-bg: #113321; --good-fg: #84e2b0;
+  --warn: #f0bd2c; --warn-bg: #362b0c; --warn-fg: #f6d576;
+  --bad: #f0645f;  --bad-bg: #3c1919;  --bad-fg: #f8a6a2;
+  --none: #4f6073; --none-bg: #1b2b3c; --none-fg: #9babbd;
+  --track: #213346;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 28px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+}
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--copper); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+[dir="ltr"] { unicode-bidi: isolate; }
+
+.wrap {
+  width: 100%; max-width: 600px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Hero (home) ---------- */
+.hero {
+  background: var(--ink);
+  background-image:
+    radial-gradient(120% 90% at 50% 0%, var(--ink-2) 0%, transparent 70%),
+    repeating-radial-gradient(circle at 50% 38%, transparent 0 34px, rgba(200, 105, 44, .10) 34px 35px);
+  color: var(--on-ink);
+  padding-block: 34px 74px;
+  text-align: center;
+}
+.brand { display: grid; justify-items: center; gap: 10px; }
+.brand .logo { width: 84px; height: 84px; filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .35)); }
+.brand-ar {
+  margin: 4px 0 0; font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(2rem, 8vw, 2.6rem); line-height: 1.15; letter-spacing: 0; text-wrap: balance;
+}
+.brand-en {
+  margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.02rem;
+  color: var(--on-ink-muted); letter-spacing: .02em;
+}
+.brand-en b { color: var(--copper); font-weight: 600; }
+.grade-pill {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+  padding: 5px 14px; border-radius: 999px; font-size: .92rem; font-weight: 600;
+  background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16); color: var(--on-ink);
+}
+.grade-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--copper); }
+
+/* ---------- Search ---------- */
+.search-card {
+  margin-top: -50px; position: relative;
+  background: var(--surface); border-radius: 22px; box-shadow: var(--shadow);
+  padding: 18px 16px 10px;
+}
+.search-label {
+  display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+  font-weight: 700; font-size: .95rem; margin-bottom: 10px; color: var(--fg);
+}
+.search-label span[dir="ltr"] { font-family: var(--font-display); color: var(--copper-text); letter-spacing: .02em; }
+.search-box {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface-2); border: 2px solid var(--line); border-radius: 16px;
+  padding-inline: 14px 6px; min-height: 60px; transition: border-color .15s, box-shadow .15s;
+}
+.search-box:focus-within { border-color: var(--copper); box-shadow: 0 0 0 4px var(--copper-soft); }
+.search-box svg { flex: none; color: var(--muted); }
+.search-box input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font-size: 1.2rem; font-weight: 500; padding-block: 12px;
+}
+.search-box input::placeholder { color: var(--muted); opacity: .8; font-weight: 400; }
+.search-box input::-webkit-search-cancel-button { display: none; }
+.clear-btn {
+  flex: none; width: 40px; height: 40px; border-radius: 12px; border: 0; background: transparent;
+  color: var(--muted); font-size: 1.4rem; line-height: 1;
+}
+.clear-btn:hover { background: var(--line); }
+.hint { margin: 10px 4px 6px; font-size: .9rem; color: var(--muted); min-height: 1.4em; }
+.hint b { color: var(--fg); }
+
+.results { list-style: none; margin: 0; padding: 0; }
+.results li + li { border-top: 1px solid var(--line); }
+.res {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: start;
+  background: none; border: 0; padding: 12px 4px; border-radius: 12px;
+}
+.res:hover { background: var(--surface-2); }
+.avatar {
+  flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--copper-soft); color: var(--copper-text); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
+}
+.res-names { flex: 1; min-width: 0; display: grid; }
+.res-names b { font-weight: 600; font-size: 1.05rem; overflow-wrap: anywhere; }
+.res-names small { color: var(--muted); font-size: .85rem; text-align: right; overflow-wrap: anywhere; }
+.chev { flex: none; color: var(--muted); font-size: 1.4rem; }
+.empty { padding: 18px 6px; color: var(--muted); text-align: center; }
+
+.home-below { display: grid; gap: 14px; padding-block: 18px 8px; }
+.how {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.how div {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 10px; text-align: center;
+  font-size: .82rem; color: var(--muted); line-height: 1.45;
+}
+.how b { display: block; color: var(--fg); font-size: .95rem; margin-bottom: 2px; }
+.dotkey { display: inline-flex; gap: 4px; margin-bottom: 4px; }
+.dotkey i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- Top bar (inner pages) ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--ink); color: var(--on-ink);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+}
+.topbar .wrap { display: flex; align-items: center; gap: 10px; min-height: 58px; }
+.back {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, .1); border: 0; border-radius: 12px; padding: 8px 12px; color: var(--on-ink); font-weight: 600;
+}
+.back:hover { background: rgba(255, 255, 255, .18); }
+.top-brand { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; min-width: 0; }
+.top-brand .logo { width: 34px; height: 34px; flex: none; }
+.top-brand span { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Cards & student ---------- */
+.page { display: grid; gap: 14px; padding-block: 16px 28px; }
+.card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+.st-head { display: grid; gap: 6px; }
+.st-name { margin: 0; font-weight: 700; font-size: 1.55rem; line-height: 1.25; text-wrap: balance; overflow-wrap: anywhere; }
+.st-en { margin: 0; color: var(--muted); font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag { font-size: .8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); }
+.phone {
+  margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 10px 12px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line);
+}
+.phone-label { font-size: .85rem; color: var(--muted); }
+.phone-num { font-weight: 700; font-size: 1.05rem; letter-spacing: .03em; user-select: all; }
+.phone-actions { display: flex; gap: 6px; margin-inline-start: auto; }
+.btn-sm {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600; font-size: .88rem;
+  padding: 7px 12px; border-radius: 10px; background: var(--ink); color: var(--on-ink);
+}
+.btn-sm.wa { background: #1f9d55; color: #fff; }
+
+.meters { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.meter { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 18px 10px; }
+.meter h3 { margin: 4px 0 0; font-size: 1rem; font-weight: 700; }
+.meter .sub { margin: 0; font-size: .84rem; color: var(--muted); }
+.lvl { display: inline-block; font-size: .82rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.lvl-good { background: var(--good-bg); color: var(--good-fg); }
+.lvl-warn { background: var(--warn-bg); color: var(--warn-fg); }
+.lvl-bad  { background: var(--bad-bg);  color: var(--bad-fg); }
+.lvl-none { background: var(--none-bg); color: var(--none-fg); }
+
+.ring { position: relative; display: inline-grid; place-items: center; max-width: 100%; }
+.ring svg { display: block; max-width: 100%; height: auto; }
+.ring-track { stroke: var(--track); }
+.ring-val { animation: ring-in 1s cubic-bezier(.2, .8, .2, 1) both; }
+.ring-good .ring-val { stroke: var(--good); }
+.ring-warn .ring-val { stroke: var(--warn); }
+.ring-bad  .ring-val { stroke: var(--bad); }
+.ring-none .ring-val { stroke: var(--none); }
+@keyframes ring-in { from { stroke-dasharray: 0 var(--len); } }
+.ring-in { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; line-height: 1.1; }
+.ring-in b { font-family: var(--font-display); font-weight: 700; font-variant-numeric: tabular-nums; }
+.ring-in small { font-size: .72rem; color: var(--muted); }
+.ring-lg .ring-in b { font-size: 1.85rem; }
+.ring-sm .ring-in b { font-size: .95rem; }
+.ring-good .ring-in b { color: var(--good-fg); }
+.ring-warn .ring-in b { color: var(--warn-fg); }
+.ring-bad  .ring-in b { color: var(--bad-fg); }
+.ring-none .ring-in b { color: var(--none-fg); }
+
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.fact { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 12px 8px; text-align: center; display: grid; gap: 2px; }
+.fact b { font-family: var(--font-display); font-size: 1.35rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.fact span { font-size: .78rem; color: var(--muted); line-height: 1.35; }
+.fact.alert b { color: var(--bad-fg); }
+.fact.ok b { color: var(--good-fg); }
+.fact-text b { font-family: var(--font-body); font-weight: 700; font-size: 1.12rem; padding-block: 3px; }
+
+.sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 0 0 12px; font-size: 1.05rem; font-weight: 700; }
+.sec-title small { font-weight: 500; color: var(--muted); font-size: .82rem; }
+.quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.quiz {
+  display: grid; justify-items: center; gap: 4px; text-align: center; padding: 12px 6px 10px;
+  border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); min-width: 0;
+}
+.quiz .q-name { font-weight: 600; font-size: .84rem; line-height: 1.3; overflow-wrap: anywhere; }
+.quiz .q-month { font-size: .74rem; color: var(--muted); }
+.quiz .q-score { font-size: .82rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.muted-note { margin: 0; color: var(--muted); font-size: .92rem; }
+
+.cta {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 58px; border: 0; border-radius: 16px; background: var(--ink); color: var(--on-ink);
+  font-weight: 700; font-size: 1.08rem; box-shadow: var(--shadow);
+}
+.cta:hover { background: var(--ink-2); }
+.cta svg { color: var(--copper); }
+
+/* ---------- Months ---------- */
+.months { display: grid; gap: 12px; }
+.month { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.month summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 16px 18px;
+}
+.month summary::-webkit-details-marker { display: none; }
+.m-name { font-weight: 700; font-size: 1.15rem; }
+.m-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-inline-start: auto; justify-content: flex-end; }
+.m-caret { flex: none; width: 10px; height: 10px; border-inline-start: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform .2s; margin-inline-start: 4px; }
+.month[open] .m-caret { transform: rotate(135deg); }
+.m-body { padding: 0 18px 18px; display: grid; gap: 14px; }
+.m-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 6px; text-align: center; display: grid; gap: 2px; min-width: 0; }
+.stat span { font-size: .75rem; color: var(--muted); }
+.stat b { font-size: 1.05rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat.st-bad b { color: var(--bad-fg); }
+.stat.st-good b { color: var(--good-fg); }
+.m-quizzes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.m-quizzes li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
+.m-quizzes .q-name { font-weight: 600; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.m-quizzes .q-score { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+.chip { display: inline-flex; align-items: center; font-size: .8rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.chip-good { background: var(--good-bg); color: var(--good-fg); }
+.chip-warn { background: var(--warn-bg); color: var(--warn-fg); }
+.chip-bad  { background: var(--bad-bg);  color: var(--bad-fg); }
+.chip-none { background: var(--none-bg); color: var(--none-fg); }
+.m-total { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 600; padding-top: 2px; }
+
+/* ---------- Teacher ---------- */
+.form { display: grid; gap: 10px; }
+.form label { font-weight: 700; }
+.field {
+  width: 100%; min-height: 54px; padding: 10px 14px; border-radius: 14px; border: 2px solid var(--line);
+  background: var(--surface-2); font-size: 1.1rem;
+}
+.field:focus { border-color: var(--copper); outline: 0; box-shadow: 0 0 0 4px var(--copper-soft); }
+.btn {
+  min-height: 52px; border: 0; border-radius: 14px; background: var(--ink); color: var(--on-ink); font-weight: 700; font-size: 1.02rem; padding-inline: 18px;
+}
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.err { margin: 0; color: var(--bad-fg); font-weight: 600; min-height: 1.4em; font-size: .92rem; }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.tile { border-radius: 14px; padding: 10px 6px; text-align: center; background: var(--surface-2); border: 1px solid var(--line); display: grid; }
+.tile b { font-family: var(--font-display); font-size: 1.4rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.tile span { font-size: .76rem; color: var(--muted); }
+.tile.t-good b { color: var(--good-fg); } .tile.t-warn b { color: var(--warn-fg); } .tile.t-bad b { color: var(--bad-fg); }
+.t-tools { display: grid; gap: 10px; }
+.filters { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.filters button {
+  flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: .88rem; color: var(--muted);
+}
+.filters button[aria-pressed="true"] { background: var(--copper); border-color: var(--copper); color: #fff; }
+.t-row2 { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.t-row2 .field { min-height: 46px; font-size: 1rem; }
+.t-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.t-item {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: start; border: 0;
+  background: var(--surface); box-shadow: var(--shadow); border-radius: 14px; padding: 12px 14px;
+}
+.t-item .res-names { flex: 1; }
+.t-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.t-pills .chip { font-size: .74rem; padding: 2px 8px; }
+
+/* ---------- States ---------- */
+.skel { background: linear-gradient(90deg, var(--line) 0%, var(--surface-2) 50%, var(--line) 100%); background-size: 200% 100%; animation: shimmer 1.2s infinite linear; border-radius: 12px; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.notice { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 26px 18px; }
+.notice h3 { margin: 0; }
+.notice p { margin: 0; color: var(--muted); }
+.demo-banner {
+  background: var(--copper-soft); color: var(--copper-text); text-align: center; font-size: .86rem; font-weight: 600;
+  padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px));
+}
+
+/* ---------- Footer ---------- */
+.foot { padding-block: 10px 30px; text-align: center; color: var(--muted); font-size: .85rem; display: grid; gap: 10px; justify-items: center; }
+.foot-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.link-btn { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; color: var(--muted); font-weight: 600; font-size: .85rem; }
+.link-btn:hover { color: var(--fg); border-color: var(--muted); }
+.install { max-width: 420px; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; line-height: 1.6; }
+.install b { color: var(--fg); }
+
+@media (max-width: 380px) {
+  .meters { gap: 8px; }
+  .m-stats { grid-template-columns: repeat(2, 1fr); }
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .how { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-val, .skel { animation: none; }
+  * { transition: none !important; }
+}
+
+/* app-only: iOS status bar sits over the page in standalone mode */
+.hero { padding-top: calc(34px + env(safe-area-inset-top, 0px)); }
+.topbar { top: 0; padding-top: env(safe-area-inset-top, 0px); }
+.foot { padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
+</style>
+</head>
+<body>
+<div class="demo-banner" id="demoBanner" hidden>وضع تجريبي: البيانات المعروضة وهمية للتجربة فقط</div>
+<nav class="topbar" id="topbar" hidden aria-label="شريط التنقل"></nav>
+<div id="view"></div>
+<footer class="foot wrap" id="foot"></footer>
+
+<script src="config.js"></script>
+<script>
+/* البحث بالاسم: عربي أو إنجليزي أو فرانكو، بمسافة أو من غير، بهمزة أو من غير */
+var KHSearch = (function () {
+  'use strict';
+
+  var MARKS = /[̀-ͯؐ-ًؚ-ٰٟۖ-ۭـ]/g;
+
+  function digits(s) {
+    return s
+      .replace(/[٠-٩]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[۰-۹]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); });
+  }
+
+  // توحيد الحروف: أ إ آ ← ا ، ة ← ه ، ى ← ي ، وشيل التشكيل والتطويل
+  function base(s) {
+    return digits(String(s == null ? '' : s)).toLowerCase()
+      .replace(/[أإآٱ]/g, 'ا').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
+      .normalize('NFD').replace(MARKS, '').normalize('NFC')
+      .replace(/ة/g, 'ه').replace(/[ىی]/g, 'ي').replace(/ء/g, '').replace(/ک/g, 'ك');
+  }
+
+  function words(s) {
+    return s.split(/[^0-9a-zء-ي]+/).filter(Boolean);
+  }
+
+  function isArabic(s) { return /[ء-ي]/.test(s); }
+
+  // ---------- الإنجليزي: كل طرق كتابة الاسم (Ahmed / Ahmad ، Mohamed / Muhammad ، m7md) ----------
+  function franco(w) {
+    return w.replace(/7/g, 'h').replace(/5/g, 'K').replace(/8/g, 'G').replace(/6/g, 't')
+      .replace(/9/g, 'k').replace(/[23]/g, 'a').replace(/[0-9]/g, '');
+  }
+  function latinCons(w) {
+    return w.replace(/ph/g, 'f').replace(/ck/g, 'k').replace(/kh/g, 'K').replace(/sh/g, 'S')
+      .replace(/ch/g, 'S').replace(/gh/g, 'G').replace(/th/g, 't').replace(/dh/g, 'z')
+      .replace(/q/g, 'k').replace(/c/g, 'k').replace(/j/g, 'g').replace(/v/g, 'f')
+      .replace(/p/g, 'b').replace(/x/g, 'ks');
+  }
+  function looseWord(w) {
+    w = latinCons(franco(w));
+    var out = '';
+    for (var i = 0; i < w.length; i++) {
+      var ch = w[i];
+      if (i === 0 && (ch === 'y' || ch === 'w')) { out += ch; continue; }
+      out += /[aeiouy]/.test(ch) ? 'a' : ch;
+    }
+    out = out.replace(/(.)\1+/g, '$1');
+    if (out.length > 2) out = out.replace(/ah$/, 'a');
+    return out;
+  }
+
+  // ---------- هيكل الاسم بالحروف الساكنة (عشان عربي ↔ إنجليزي) ----------
+  var AR_MAP = {
+    'ب': 'b', 'ت': 't', 'ث': 't', 'ج': 'g', 'ح': 'h', 'خ': 'K', 'د': 'd', 'ذ': 'z', 'ر': 'r',
+    'ز': 'z', 'س': 's', 'ش': 'S', 'ص': 's', 'ض': 'd', 'ط': 't', 'ظ': 'z', 'غ': 'G', 'ف': 'f',
+    'ق': 'k', 'ك': 'k', 'ل': 'l', 'م': 'm', 'ن': 'n', 'ه': 'h',
+  };
+  function skelArabic(w) {
+    var out = '';
+    for (var i = 0; i < w.length; i++) {
+      var ch = w[i];
+      if (i === 0 && ch === 'ي') { out += 'y'; continue; }
+      if (i === 0 && ch === 'و') { out += 'w'; continue; }
+      if (ch === 'ه' && i === w.length - 1 && i > 0) continue;
+      if (AR_MAP[ch]) out += AR_MAP[ch];
+    }
+    return { s: out.replace(/(.)\1+/g, '$1'), v: /^[اع]/.test(w), art: /^ال/.test(w) && w.length > 3 };
+  }
+  function skelLatin(w) {
+    w = latinCons(franco(w)).replace(/(.)\1+/g, '$1');
+    var v = /^[aeiou]/.test(w);
+    var art = /^(el|al)/.test(w) && w.length > 3;
+    w = w.replace(/([aeiou])h$/, '$1');
+    var out = '';
+    for (var i = 0; i < w.length; i++) {
+      var ch = w[i];
+      if (i === 0 && (ch === 'y' || ch === 'w')) { out += ch; continue; }
+      if (/[aeiouyw]/.test(ch)) continue;
+      out += ch;
+    }
+    return { s: out.replace(/(.)\1+/g, '$1'), v: v, art: art };
+  }
+  function skelOf(ws, arabic) {
+    var s = '', starts = [];
+    ws.forEach(function (w) {
+      var k = arabic ? skelArabic(w) : skelLatin(w);
+      if (!k.s) return;
+      starts.push({ p: s.length, v: k.v });
+      if (k.art && k.s.length > 1) starts.push({ p: s.length + 1, v: false });
+      s += k.s;
+    });
+    return { s: s, starts: starts };
+  }
+
+  // ---------- مطابقة إنجليزي ↔ عربي بالحروف الساكنة + حروف المد (و ي ا) ----------
+  // مثال: mohamed تطابق محمد بس متطابقش محمود (لأن الواو لازم يقابلها o/u)
+  var VOWEL_OK = { U: /[ouw]/, I: /[iey]/, A: /[ae]/, E: /./ };
+  function arTokens(ws) {
+    var toks = [], starts = [], ends = {};
+    ws.forEach(function (w) {
+      var i0 = 0, v = false, n = w.length, w0 = toks.length;
+      if (/^[اع]/.test(w)) { v = true; i0 = 1; toks.push({ v: 'E' }); }
+      starts.push({ p: toks.length, v: v });
+      for (var i = i0; i < n; i++) {
+        var ch = w[i], last = i === n - 1;
+        if (i === 0 && ch === 'ي') { toks.push({ c: 'y' }); continue; }
+        if (i === 0 && ch === 'و') { toks.push({ c: 'w' }); continue; }
+        if (last && /[هويا]/.test(ch) && i > 0) continue;
+        if (ch === 'و') { toks.push({ v: 'U' }); continue; }
+        if (ch === 'ي') { toks.push({ v: 'I' }); continue; }
+        if (ch === 'ا') { toks.push({ v: 'A' }); continue; }
+        if (ch === 'ع') { if (!last) toks.push({ v: 'E' }); continue; }
+        var c = AR_MAP[ch];
+        if (!c) continue;
+        var prev = toks.length > w0 ? toks[toks.length - 1] : null;
+        if (prev && prev.c === c) continue;
+        toks.push({ c: c });
+        if (i === 1 && /^ال/.test(w) && n > 3) starts.push({ p: toks.length, v: false });
+      }
+      ends[toks.length] = true;
+    });
+    return { toks: toks, starts: starts, ends: ends };
+  }
+  function latTokens(ws) {
+    var toks = [], v = false, cons = 0;
+    ws.forEach(function (w, wi) {
+      w = latinCons(franco(w)).replace(/(.)\1+/g, '$1').replace(/([aeiou])h$/, '$1');
+      var i = 0, run = '';
+      while (i < w.length && /[aeiou]/.test(w[i])) run += w[i++];
+      if (run) { if (wi === 0) v = true; else toks.push({ g: run }); }
+      run = '';
+      for (; i < w.length; i++) {
+        var ch = w[i];
+        if (i === 0 && (ch === 'y' || ch === 'w')) { toks.push({ c: ch }); cons++; continue; }
+        if (/[aeiouyw]/.test(ch)) { run += ch; continue; }
+        if (run) { toks.push({ g: run }); run = ''; }
+        toks.push({ c: ch }); cons++;
+      }
+      if (run) toks.push({ g: run });
+    });
+    return { toks: toks, v: v, cons: cons };
+  }
+  function alignFrom(lat, ar, j0, lenient, needEnd) {
+    var memo = {};
+    function rec(i, j) {
+      var key = i * 4096 + j;
+      if (key in memo) return memo[key];
+      var r = false, lt = lat[i], at = ar.toks[j];
+      if (i === lat.length) r = !needEnd || !!ar.ends[j];
+      else if (lt.c) {
+        if (at && at.c) r = at.c === lt.c && rec(i + 1, j + 1);
+        else if (at && at.v) r = (at.v === 'E' || lenient) && rec(i, j + 1);
+      } else {
+        r = rec(i + 1, j);
+        for (var k = j; !r && k < ar.toks.length && ar.toks[k].v && VOWEL_OK[ar.toks[k].v].test(lt.g); k++) {
+          r = rec(i + 1, k + 1);
+        }
+      }
+      memo[key] = r;
+      return r;
+    }
+    return rec(0, j0);
+  }
+  function crossMatch(arT, q, lenient, score) {
+    if (!q.cons || !arT.toks.length) return 0;
+    for (var s = 0; s < arT.starts.length; s++) {
+      var st = arT.starts[s];
+      if (st.v !== q.v) continue;
+      if (alignFrom(q.toks, arT, st.p, lenient, q.cons < 2)) return s === 0 ? score + 5 : score;
+    }
+    return 0;
+  }
+
+  // ---------- تجهيز اسم كل طالب مرة واحدة ----------
+  function joinWithStarts(ws, arabic) {
+    var s = '', starts = [];
+    ws.forEach(function (w) {
+      starts.push(s.length);
+      if (arabic && /^ال/.test(w) && w.length > 3) starts.push(s.length + 2);
+      if (!arabic && /^(el|al)/.test(w) && w.length > 4) starts.push(s.length + 2);
+      s += w;
+    });
+    return { s: s, starts: starts };
+  }
+
+  function prepare(list) {
+    return list.map(function (st) {
+      var arW = words(base(st.ar || '')).filter(isArabic);
+      var enW = words(base(st.en || '')).filter(function (w) { return !isArabic(w); });
+      // لو الاسم العربي اتكتب بالإنجليزي في عمود العربي
+      if (!arW.length) enW = enW.concat(words(base(st.ar || '')).filter(function (w) { return !isArabic(w); }));
+      var looseW = enW.map(looseWord);
+      return {
+        st: st,
+        hasAr: arW.length > 0,
+        hasEn: enW.length > 0,
+        ar: joinWithStarts(arW, true),
+        en: joinWithStarts(enW, false),
+        loose: joinWithStarts(looseW, false),
+        looseWhole: looseWord(enW.join('')),
+        arT: arTokens(arW),
+        skEn: skelOf(enW, false),
+      };
+    });
+  }
+
+  function direct(t, q, top, inside) {
+    if (!q || !t.s) return 0;
+    if (t.s.indexOf(q) === 0) return top;
+    for (var i = 0; i < t.starts.length; i++) if (t.s.startsWith(q, t.starts[i])) return top - 8;
+    if (inside && q.length >= 4 && t.s.indexOf(q) >= 0) return top - 40;
+    return 0;
+  }
+  function tokens(t, qw, score) {
+    var ok = qw.filter(function (w) { return w.length >= 2; });
+    if (ok.length < 2) return 0;
+    var all = ok.every(function (w) {
+      return t.starts.some(function (p) { return t.s.startsWith(w, p); });
+    });
+    return all ? score : 0;
+  }
+  function skelMatch(sk, q, score) {
+    if (!q || q.s.length < 2 || !sk.s || !q.starts.length) return 0;
+    var qv = q.starts[0].v;
+    for (var i = 0; i < sk.starts.length; i++) {
+      var st = sk.starts[i];
+      if (st.v === qv && sk.s.startsWith(q.s, st.p)) return i === 0 ? score + 5 : score;
+    }
+    return 0;
+  }
+
+  function search(prepared, query, limit) {
+    var b = base(query);
+    var qw = words(b);
+    if (!qw.length) return [];
+    var arabic = isArabic(b);
+    var qJoined = qw.join('');
+    var res = [];
+
+    if (arabic) {
+      var qa = qw.filter(isArabic);
+      var qaJoined = qa.join('');
+      var qsk = skelOf(qa, true);
+      prepared.forEach(function (e) {
+        var sc = 0;
+        if (e.hasAr) sc = Math.max(direct(e.ar, qaJoined, 100, true), tokens(e.ar, qa, 60));
+        else if (e.hasEn) sc = skelMatch(e.skEn, qsk, 40);
+        if (sc > 0) res.push({ st: e.st, score: sc });
+      });
+    } else {
+      var qLoose = qw.map(looseWord);
+      var qLooseJoined = qLoose.join('');
+      var qLooseWhole = looseWord(qJoined);
+      var qlt = latTokens(qw);
+      var qltWords = qw.length > 1 ? qw.map(function (w) { return latTokens([w]); }) : [];
+      var francoish = /[0-9]/.test(qJoined) || !/[aeiou]/.test(qJoined.slice(1));
+      prepared.forEach(function (e) {
+        var sc = 0;
+        if (e.hasEn) {
+          sc = Math.max(
+            direct(e.en, qJoined, 95, true),
+            direct(e.loose, qLooseJoined, 80),
+            e.looseWhole.indexOf(qLooseWhole) === 0 ? 78 : 0,
+            tokens(e.loose, qLoose, 55)
+          );
+        }
+        if (sc === 0 && e.hasAr && (!e.hasEn || francoish)) {
+          sc = crossMatch(e.arT, qlt, francoish, 40);
+          if (sc === 0 && qltWords.length && qltWords.every(function (t) { return crossMatch(e.arT, t, francoish, 1) > 0; })) sc = 35;
+        }
+        if (sc > 0) res.push({ st: e.st, score: sc });
+      });
+    }
+
+    res.sort(function (a, b2) {
+      return b2.score - a.score || String(a.st.ar).localeCompare(String(b2.st.ar), 'ar');
+    });
+    return res.slice(0, limit || 60).map(function (r) { return r.st; });
+  }
+
+  return { prepare: prepare, search: search, base: base };
+})();
+if (typeof module !== 'undefined') module.exports = KHSearch;
+
+/* بيانات تجريبية: بتشتغل لوحدها لو رابط الشيت لسه متحطش في config.js */
+var KHDemo = (function () {
+  'use strict';
+  var SETTINGS = { green: 85, yellow: 65, attGreen: 90, attYellow: 75 };
+  var PASSWORD = '1234';
+  var PEOPLE = [
+    ['أحمد محمد علي', 'Ahmed Mohamed Ali', '01012345678', 0.94],
+    ['محمد أحمد حسن', 'Mohamed Ahmed Hassan', '01123456789', 0.76],
+    ['مريم خالد إبراهيم', 'Mariam Khaled Ibrahim', '01234567890', 0.9],
+    ['يوسف عبد الرحمن السيد', 'Youssef Abdelrahman Elsayed', '01098765432', 0.56],
+    ['سلمى مصطفى محمود', '', '01187654321', 0.72],
+    ['عمر إسلام فتحي', 'Omar Eslam Fathy', '01276543210', 0.8],
+    ['آية طارق عبد الله', 'Aya Tarek Abdallah', '01055512345', 0.95],
+    ['زياد هشام جمال', 'Ziad Hesham Gamal', '01155598765', 0.5],
+    ['فاطمة الزهراء أحمد', 'Fatma Elzahraa Ahmed', '01022233344', 0.88],
+    ['محمود سامح عادل', 'Mahmoud Sameh Adel', '01133344455', 0.68],
+    ['هاجر وليد سعيد', 'Hager Waleed Saeed', '01244455566', 0.78],
+    ['كريم أشرف عبد العزيز', 'Karim Ashraf Abdelaziz', '01066677788', 0.61],
+    ['نور الهدى إبراهيم', 'Nour Elhoda Ibrahim', '01577788899', 0.92],
+    ['عبد الله ياسر منصور', 'Abdallah Yasser Mansour', '01188899900', 0.74],
+  ];
+  var MONTHS = [
+    { name: 'أغسطس', exams: [['كويز 1', 20], ['كويز 2', 20]] },
+    { name: 'سبتمبر', exams: [['كويز 1', 15], ['كويز 2', 20], ['امتحان الشهر', 50]] },
+    { name: 'أكتوبر', exams: [['كويز 1', 20], ['كويز 2', 20]] },
+  ];
+
+  function rand(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  var STUDENTS = PEOPLE.map(function (p, i) {
+    var r = rand(i * 97 + 13);
+    var attBias = p[3] > 0.85 ? 0 : p[3] > 0.65 ? 1 : 2;
+    return {
+      id: String(i + 1), ar: p[0], en: p[1], phone: p[2],
+      months: MONTHS.map(function (m, mi) {
+        var absent = Math.min(4, Math.floor(r() * (attBias + 1.4)));
+        return {
+          name: m.name,
+          present: 8 - absent,
+          absent: absent,
+          fee: mi === MONTHS.length - 1 && r() < 0.25 ? 0 : 450,
+          exams: m.exams.map(function (ex) {
+            if (r() < 0.07) return { name: ex[0], max: ex[1], score: null, status: 'absent' };
+            var v = p[3] + (r() - 0.5) * 0.22;
+            var score = Math.max(0, Math.min(ex[1], Math.round(ex[1] * v * 2) / 2));
+            return { name: ex[0], max: ex[1], score: score, status: 'taken' };
+          }),
+        };
+      }),
+    };
+  });
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function handle(action, params) {
+    var updated = new Date().toISOString();
+    var months = MONTHS.map(function (m) { return m.name; });
+    if (action === 'index') {
+      return { ok: true, settings: SETTINGS, updated: updated, months: months,
+        students: STUDENTS.map(function (s) { return { id: s.id, ar: s.ar, en: s.en }; }) };
+    }
+    if (action === 'student') {
+      var s = STUDENTS.filter(function (x) { return x.id === String(params.id); })[0];
+      if (!s) return { ok: false, error: 'not_found' };
+      var pub = clone(s); pub.phone = '';
+      return { ok: true, settings: SETTINGS, student: pub };
+    }
+    if (action === 'overview') {
+      if (String(params.key || '').trim() !== PASSWORD) return { ok: false, error: 'wrong_password' };
+      return { ok: true, settings: SETTINGS, updated: updated, months: months, students: clone(STUDENTS) };
+    }
+    return { ok: false, error: 'unknown_action' };
+  }
+
+  return { handle: handle };
+})();
+
+(function () {
+  'use strict';
+
+  var CFG = window.APP_CONFIG || {};
+  var API = String(CFG.API_URL || '').trim();
+  var DEMO = !/^https?:\/\//.test(API);
+
+  var LOGO = '<svg class="logo" viewBox="0 0 64 64" aria-hidden="true">' +
+    '<circle cx="32" cy="32" r="31" fill="#0c2238"/>' +
+    '<circle cx="32" cy="32" r="30" fill="none" stroke="#c8692c" stroke-opacity=".45" stroke-width="1.2"/>' +
+    '<g fill="none" stroke="#e08a4f" stroke-width="2.3">' +
+    '<ellipse cx="32" cy="32" rx="22" ry="8.2"/>' +
+    '<ellipse cx="32" cy="32" rx="22" ry="8.2" transform="rotate(60 32 32)"/>' +
+    '<ellipse cx="32" cy="32" rx="22" ry="8.2" transform="rotate(-60 32 32)"/></g>' +
+    '<circle cx="32" cy="32" r="4.6" fill="#f3a46c"/>' +
+    '<circle cx="54" cy="32" r="2.6" fill="#f2f6fa"/>' +
+    '<circle cx="21" cy="13" r="2.2" fill="#f2f6fa"/></svg>';
+  var ICON_SEARCH = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>';
+  var ICON_CAL = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var view = $('#view');
+  var topbar = $('#topbar');
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmt(n) {
+    if (n == null || isNaN(n)) return '—';
+    return Number.isInteger(n) ? String(n) : String(Math.round(n * 10) / 10);
+  }
+  function money(n) { return Math.round(n).toLocaleString('en-US'); }
+  function store(kind) {
+    return {
+      get: function (k) { try { var v = window[kind].getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+      set: function (k, v) { try { window[kind].setItem(k, JSON.stringify(v)); } catch (e) { /* ignore */ } },
+      del: function (k) { try { window[kind].removeItem(k); } catch (e) { /* ignore */ } },
+    };
+  }
+  var LS = store('localStorage');
+  var SS = store('sessionStorage');
+  var CACHE_KEY = 'kh_index_' + (DEMO ? 'demo' : API.slice(-24));
+
+  var state = {
+    settings: { green: 85, yellow: 65, attGreen: 90, attYellow: 75 },
+    students: null, prepared: null, loadError: null, updated: null,
+    cache: {}, teacher: null, query: '', seq: 0,
+    tFilter: 'all', tQuery: '', tSort: 'name',
+  };
+
+  /* ---------------- API ---------------- */
+  function api(action, params) {
+    params = params || {};
+    if (DEMO) {
+      return new Promise(function (res) { setTimeout(function () { res(KHDemo.handle(action, params)); }, 260); });
+    }
+    var u = API + (API.indexOf('?') >= 0 ? '&' : '?') + 'action=' + encodeURIComponent(action);
+    Object.keys(params).forEach(function (k) { u += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); });
+    return fetch(u, { cache: 'no-store', redirect: 'follow' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(function (t) { try { return JSON.parse(t); } catch (e) { throw new Error('not_json'); } });
+  }
+  function applySettings(s) { if (s) state.settings = Object.assign({}, state.settings, s); }
+
+  function setIndex(data) {
+    applySettings(data.settings);
+    state.students = data.students || [];
+    state.prepared = KHSearch.prepare(state.students);
+    state.updated = data.updated;
+    state.loadError = null;
+  }
+  function loadIndex() {
+    var cached = LS.get(CACHE_KEY);
+    if (cached && cached.students) setIndex(cached);
+    return api('index').then(function (d) {
+      if (!d || !d.ok) throw new Error((d && d.error) || 'bad_response');
+      setIndex(d);
+      LS.set(CACHE_KEY, { settings: d.settings, students: d.students, updated: d.updated });
+    }).catch(function (e) {
+      if (!state.students) state.loadError = e.message || 'error';
+    }).then(function () {
+      if (currentView() === 'home') renderResults();
+    });
+  }
+
+  /* ---------------- Calculations ---------------- */
+  function tone(p, g, y) { if (p == null) return 'none'; return p >= g ? 'good' : p >= y ? 'warn' : 'bad'; }
+  var GRADE_LABEL = { good: 'ممتاز', warn: 'متوسط', bad: 'يحتاج متابعة', none: 'لا توجد درجات بعد' };
+  var ATT_LABEL = { good: 'منتظم', warn: 'متوسط', bad: 'غياب كثير', none: 'لم يُسجَّل بعد' };
+
+  function examPct(ex) { return ex.status === 'taken' && ex.max > 0 ? Math.round(ex.score / ex.max * 100) : null; }
+
+  function summarize(st) {
+    var S = state.settings;
+    var r = { got: 0, max: 0, taken: 0, missed: 0, present: 0, absent: 0, paid: 0, unpaid: 0, unpaidMonths: [], feeKnown: 0, quizzes: [] };
+    (st.months || []).forEach(function (m) {
+      (m.exams || []).forEach(function (ex) {
+        r.quizzes.push({ name: ex.name, month: m.name, max: ex.max, score: ex.score, status: ex.status });
+        if (ex.status === 'taken') { r.got += ex.score; r.max += ex.max; r.taken++; } else r.missed++;
+      });
+      if (m.present != null) r.present += m.present;
+      if (m.absent != null) r.absent += m.absent;
+      if (m.fee != null) r.feeKnown++;
+      if (m.fee > 0) r.paid += m.fee; else if (m.fee === 0) { r.unpaid++; r.unpaidMonths.push(m.name); }
+    });
+    r.gradePct = r.max > 0 ? Math.round(r.got / r.max * 100) : null;
+    r.gradeTone = tone(r.gradePct, S.green, S.yellow);
+    var att = r.present + r.absent;
+    r.attPct = att > 0 ? Math.round(r.present / att * 100) : null;
+    r.attTone = tone(r.attPct, S.attGreen, S.attYellow);
+    var last = (st.months || [])[st.months.length - 1];
+    r.lastUnpaid = !!last && last.fee === 0;
+    return r;
+  }
+  function monthSummary(m) {
+    var got = 0, max = 0, taken = 0;
+    (m.exams || []).forEach(function (ex) { if (ex.status === 'taken') { got += ex.score; max += ex.max; taken++; } });
+    var p = max > 0 ? Math.round(got / max * 100) : null;
+    return { got: got, max: max, taken: taken, pct: p, tone: tone(p, state.settings.green, state.settings.yellow) };
+  }
+
+  /* ---------------- UI pieces ---------------- */
+  function ring(pct, tn, size, stroke, inner, label, cls) {
+    var r = (size - stroke) / 2, c = 2 * Math.PI * r, h = size / 2;
+    var v = pct == null ? 0 : Math.max(0, Math.min(100, pct));
+    var d = c * v / 100;
+    return '<div class="ring ring-' + tn + ' ' + (cls || '') + '" role="img" aria-label="' + esc(label) + '">' +
+      '<svg viewBox="0 0 ' + size + ' ' + size + '" width="' + size + '" height="' + size + '" aria-hidden="true">' +
+      '<circle class="ring-track" cx="' + h + '" cy="' + h + '" r="' + r + '" fill="none" stroke-width="' + stroke + '"/>' +
+      (v > 0 ? '<circle class="ring-val" cx="' + h + '" cy="' + h + '" r="' + r + '" fill="none" stroke-width="' + stroke +
+        '" stroke-linecap="round" stroke-dasharray="' + d.toFixed(2) + ' ' + c.toFixed(2) + '" transform="rotate(-90 ' + h + ' ' + h + ')" style="--len:' + c.toFixed(2) + 'px"/>' : '') +
+      '</svg><div class="ring-in">' + inner + '</div></div>';
+  }
+  function pctText(p) { return p == null ? '—' : p + '%'; }
+  function chip(tn, text) { return '<span class="chip chip-' + tn + '">' + esc(text) + '</span>'; }
+  function initial(name) { var m = String(name || '').trim().match(/[ء-يa-zA-Z]/); return m ? m[0].replace(/[أإآ]/, 'ا').toUpperCase() : '؟'; }
+
+  function phoneBlock(raw) {
+    if (!raw) return '';
+    var txt = String(raw).replace(/[٠-٩]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); });
+    var nums = txt.match(/\+?\d[\d\s-]{6,}\d/g) || [];
+    var first = nums.length ? nums[0].replace(/[^\d+]/g, '') : '';
+    var display = nums.length === 1 && /^0\d{10}$/.test(first) ? first.replace(/^(\d{4})(\d{3})(\d{4})$/, '$1 $2 $3') : txt;
+    var wa = first.replace(/^\+/, '');
+    if (/^0\d{10}$/.test(wa)) wa = '2' + wa;
+    return '<div class="phone"><span class="phone-label">رقم ولي الأمر</span>' +
+      '<span class="phone-num num" dir="ltr">' + esc(display) + '</span>' +
+      (first ? '<span class="phone-actions"><a class="btn-sm" href="tel:' + esc(first) + '">اتصال</a>' +
+        '<a class="btn-sm wa" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">واتساب</a></span>' : '') +
+      '</div>';
+  }
+
+  function errorBox(err, retry) {
+    var msg = 'تأكد من اتصال الإنترنت وحاول مرة أخرى.';
+    if (err === 'setup_needed') msg = 'الشيت لم يتم تجهيزه بعد.';
+    else if (err === 'not_json') msg = 'الرابط في config.js غير صحيح أو صلاحية الوصول ليست Anyone.';
+    return '<div class="card notice"><h3>تعذّر تحميل البيانات</h3><p>' + esc(msg) + '</p>' +
+      (retry ? '<button class="btn" type="button" data-act="retry">حاول مرة أخرى</button>' : '') + '</div>';
+  }
+  function skeleton() {
+    return '<div class="page wrap" aria-busy="true"><div class="card"><div class="skel" style="height:30px;width:60%"></div>' +
+      '<div class="skel" style="height:18px;width:40%;margin-top:10px"></div></div>' +
+      '<div class="meters"><div class="card skel" style="height:220px"></div><div class="card skel" style="height:220px"></div></div>' +
+      '<div class="card skel" style="height:140px"></div></div>';
+  }
+
+  /* ---------------- Router ---------------- */
+  function currentView() { return (history.state && history.state.v) || 'home'; }
+  function go(st) { history.pushState(st, ''); render(st); }
+  function back() { if (history.length > 1 && history.state && history.state.v !== 'home') history.back(); else { history.replaceState({ v: 'home' }, ''); render({ v: 'home' }); } }
+  window.addEventListener('popstate', function (e) { render(e.state || { v: 'home' }); });
+
+  function setTop(show) {
+    topbar.hidden = !show;
+  }
+  function render(st) {
+    state.seq++;
+    st = st || { v: 'home' };
+    $('#foot').hidden = st.v !== 'home';
+    if (st.v === 'student') renderStudent(st.id);
+    else if (st.v === 'months') renderMonths(st.id);
+    else if (st.v === 'teacher') renderTeacher();
+    else renderHome();
+    if (st.v !== 'home') window.scrollTo(0, 0);
+  }
+
+  /* ---------------- Home ---------------- */
+  function renderHome() {
+    setTop(false);
+    var S = state.settings;
+    view.innerHTML =
+      '<header class="hero"><div class="wrap brand">' + LOGO +
+      '<h1 class="brand-ar">مس خلود حمودة</h1>' +
+      '<p class="brand-en" dir="ltr">Ms. Kholoud Hamouda · <b>Physics Teacher</b></p>' +
+      '<span class="grade-pill">الصف الثالث الثانوي</span></div></header>' +
+      '<main class="wrap">' +
+      '<section class="search-card" aria-label="البحث عن طالب">' +
+      '<label class="search-label" for="q"><span>ابحث باسم الطالب</span><span dir="ltr">Search by name</span></label>' +
+      '<div class="search-box">' + ICON_SEARCH +
+      '<input id="q" type="search" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="اكتب اسم الطالب">' +
+      '<button class="clear-btn" type="button" data-act="clear" aria-label="مسح" hidden>×</button></div>' +
+      '<p class="hint" id="hint" aria-live="polite"></p>' +
+      '<ul class="results" id="results"></ul></section>' +
+      '<div class="home-below">' +
+      '<div class="how">' +
+      '<div><span class="dotkey"><i style="background:var(--good)"></i></span><b>أخضر</b>من ' + S.green + '% فأكثر</div>' +
+      '<div><span class="dotkey"><i style="background:var(--warn)"></i></span><b>أصفر</b>من ' + S.yellow + '% إلى أقل من ' + S.green + '%</div>' +
+      '<div><span class="dotkey"><i style="background:var(--bad)"></i></span><b>أحمر</b>أقل من ' + S.yellow + '%</div>' +
+      '</div></div></main>';
+    var q = $('#q');
+    q.value = state.query;
+    q.addEventListener('input', function () { state.query = q.value; renderResults(); });
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { var first = $('#results .res'); if (first) first.click(); }
+    });
+    renderResults();
+  }
+
+  function renderResults() {
+    var box = $('#results'), hint = $('#hint'), clear = $('[data-act="clear"]');
+    if (!box) return;
+    var q = state.query;
+    if (clear) clear.hidden = !q;
+    if (!state.students) {
+      if (state.loadError) { hint.textContent = ''; box.innerHTML = '<li>' + errorBox(state.loadError, true) + '</li>'; }
+      else { hint.textContent = 'جارٍ تحميل أسماء الطلاب…'; box.innerHTML = ''; }
+      return;
+    }
+    if (!q.trim()) {
+      hint.textContent = 'اكتب الاسم بالعربي أو بالإنجليزي';
+      box.innerHTML = '';
+      return;
+    }
+    var list = KHSearch.search(state.prepared, q, 60);
+    hint.textContent = list.length ? 'عدد النتائج: ' + list.length : '';
+    box.innerHTML = list.length ? list.map(function (s) {
+      return '<li><button class="res" type="button" data-id="' + esc(s.id) + '">' +
+        '<span class="avatar" aria-hidden="true">' + esc(initial(s.ar)) + '</span>' +
+        '<span class="res-names"><b>' + esc(s.ar) + '</b>' + (s.en ? '<small dir="ltr">' + esc(s.en) + '</small>' : '') + '</span>' +
+        '<span class="chev" aria-hidden="true">‹</span></button></li>';
+    }).join('') : '<li class="empty">لا يوجد طالب بهذا الاسم. جرّب جزءًا من الاسم فقط.</li>';
+  }
+
+  /* ---------------- Student ---------------- */
+  function getStudent(id) {
+    if (state.cache[id]) return Promise.resolve(state.cache[id]);
+    return api('student', { id: id }).then(function (d) {
+      if (!d || !d.ok) throw new Error((d && d.error) || 'bad_response');
+      applySettings(d.settings);
+      state.cache[id] = d.student;
+      return d.student;
+    });
+  }
+
+  function withStudent(id, draw) {
+    setTop(true);
+    var seq = state.seq;
+    if (!state.cache[id]) view.innerHTML = skeleton();
+    getStudent(id).then(function (st) {
+      if (seq !== state.seq) return;
+      view.innerHTML = draw(st);
+    }).catch(function (e) {
+      if (seq !== state.seq) return;
+      view.innerHTML = '<div class="page wrap">' + (e.message === 'not_found'
+        ? '<div class="card notice"><h3>الطالب غير موجود</h3><p>ربما تم حذفه من الشيت.</p></div>'
+        : errorBox(e.message, true)) + '</div>';
+    });
+  }
+
+  function renderStudent(id) {
+    withStudent(id, function (st) {
+      var s = summarize(st);
+      var quizzes = s.quizzes.length ? '<div class="quiz-grid">' + s.quizzes.map(function (q) {
+        var p = examPct(q), tn = q.status === 'taken' ? tone(p, state.settings.green, state.settings.yellow) : 'none';
+        var inner = q.status === 'taken' ? '<b>' + p + '%</b>' : '<b>غ</b>';
+        return '<div class="quiz">' + ring(p, tn, 66, 7, inner, q.name + ' ' + q.month + ': ' + (q.status === 'taken' ? p + '%' : 'غائب'), 'ring-sm') +
+          '<span class="q-name">' + esc(q.name) + '</span><span class="q-month">' + esc(q.month) + '</span>' +
+          '<span class="q-score num" dir="ltr">' + (q.status === 'taken' ? fmt(q.score) + ' / ' + fmt(q.max) : 'لم يمتحن') + '</span></div>';
+      }).join('') + '</div>' : '<p class="muted-note">لم يتم تسجيل كويزات بعد.</p>';
+
+      return '<div class="page wrap">' +
+        '<section class="card st-head">' +
+        '<h2 class="st-name">' + esc(st.ar) + '</h2>' +
+        (st.en ? '<p class="st-en" dir="ltr">' + esc(st.en) + '</p>' : '') +
+        '<div class="tags"><span class="tag">الصف الثالث الثانوي</span><span class="tag">فيزياء</span>' +
+        '<span class="tag num">' + (st.months || []).length + ' شهور مسجلة</span></div>' +
+        (state.teacher ? phoneBlock(st.phone) : '') + '</section>' +
+
+        '<section class="meters">' +
+        '<article class="card meter">' + ring(s.gradePct, s.gradeTone, 136, 13, '<b>' + pctText(s.gradePct) + '</b>', 'المستوى العام ' + pctText(s.gradePct), 'ring-lg') +
+        '<h3>المستوى العام</h3><span class="lvl lvl-' + s.gradeTone + '">' + GRADE_LABEL[s.gradeTone] + '</span>' +
+        '<p class="sub num">' + (s.max ? fmt(s.got) + ' من ' + fmt(s.max) + ' درجة' : '—') + '</p></article>' +
+        '<article class="card meter">' + ring(s.attPct, s.attTone, 136, 13, '<b>' + pctText(s.attPct) + '</b>', 'حضور الحصص ' + pctText(s.attPct), 'ring-lg') +
+        '<h3>حضور الحصص</h3><span class="lvl lvl-' + s.attTone + '">' + ATT_LABEL[s.attTone] + '</span>' +
+        '<p class="sub num">حضر ' + s.present + ' حصة · غاب ' + s.absent + '</p></article>' +
+        '</section>' +
+
+        '<section class="facts">' +
+        '<div class="fact"><b>' + s.taken + '</b><span>كويزات امتحنها</span></div>' +
+        '<div class="fact' + (s.absent ? ' alert' : '') + '"><b>' + s.absent + '</b><span>حصص غاب فيها</span></div>' +
+        (s.unpaid ? '<div class="fact fact-text alert"><b>غير منتظم</b><span>المصاريف الشهرية<br>لم يدفع: ' + esc(s.unpaidMonths.join('، ')) + '</span></div>'
+          : s.feeKnown ? '<div class="fact fact-text ok"><b>منتظم</b><span>المصاريف الشهرية</span></div>'
+            : '<div class="fact fact-text"><b>—</b><span>المصاريف الشهرية<br>لم تُسجَّل بعد</span></div>') +
+        '</section>' +
+
+        '<section class="card"><h3 class="sec-title">درجات الكويزات <small class="num">' + s.taken + ' من ' + s.quizzes.length + '</small></h3>' + quizzes + '</section>' +
+
+        '<button class="cta" type="button" data-act="months" data-id="' + esc(st.id) + '">' + ICON_CAL + 'التفاصيل بالشهور</button>' +
+        '</div>';
+    });
+  }
+
+  /* ---------------- Months ---------------- */
+  function renderMonths(id) {
+    withStudent(id, function (st) {
+      var months = st.months || [];
+      var body = months.length ? months.map(function (m, i) {
+        var ms = monthSummary(m);
+        var feeChip = m.fee > 0 ? chip('good', 'دفع ' + money(m.fee)) : m.fee === 0 ? chip('bad', 'لم يدفع') : chip('none', 'المصاريف لم تُسجَّل');
+        var gradeChip = (m.exams || []).length ? chip(ms.tone, ms.pct == null ? 'لم يمتحن' : ms.pct + '%') : chip('none', 'بدون كويزات');
+        var quizList = (m.exams || []).length ? '<ul class="m-quizzes">' + m.exams.map(function (ex) {
+          var p = examPct(ex);
+          return '<li><span class="q-name">' + esc(ex.name) + '</span>' +
+            '<span class="q-score num" dir="ltr">' + (ex.status === 'taken' ? fmt(ex.score) + ' / ' + fmt(ex.max) : 'من ' + fmt(ex.max)) + '</span>' +
+            (ex.status === 'taken' ? chip(tone(p, state.settings.green, state.settings.yellow), p + '%') : chip('none', 'لم يمتحن')) + '</li>';
+        }).join('') + '</ul>' : '<p class="muted-note">لا توجد كويزات في هذا الشهر.</p>';
+        var feeTxt = m.fee > 0 ? money(m.fee) + ' ج' : m.fee === 0 ? 'لم يدفع' : '—';
+        return '<details class="month"' + (i === months.length - 1 ? ' open' : '') + '>' +
+          '<summary><span class="m-name">' + esc(m.name) + '</span><span class="m-chips">' + gradeChip + feeChip + '</span><span class="m-caret" aria-hidden="true"></span></summary>' +
+          '<div class="m-body"><div class="m-stats">' +
+          '<div class="stat st-good"><span>حصص حضرها</span><b>' + fmt(m.present) + '</b></div>' +
+          '<div class="stat' + (m.absent ? ' st-bad' : '') + '"><span>حصص غابها</span><b>' + fmt(m.absent) + '</b></div>' +
+          '<div class="stat' + (m.fee === 0 ? ' st-bad' : '') + '"><span>المصاريف</span><b>' + feeTxt + '</b></div>' +
+          '<div class="stat"><span>كويزات امتحنها</span><b>' + ms.taken + ' من ' + (m.exams || []).length + '</b></div>' +
+          '</div>' + quizList +
+          ((m.exams || []).length ? '<div class="m-total"><span>درجة الشهر</span><span class="num">' + (ms.max ? '<span dir="ltr">' + fmt(ms.got) + ' / ' + fmt(ms.max) + '</span> ' : '') + chip(ms.tone, ms.pct == null ? '—' : ms.pct + '%') + '</span></div>' : '') +
+          '</div></details>';
+      }).join('') : '<div class="card notice"><p>لا توجد شهور مسجلة لهذا الطالب بعد.</p></div>';
+
+      return '<div class="page wrap">' +
+        '<section class="card st-head"><h2 class="st-name">' + esc(st.ar) + '</h2>' +
+        '<div class="tags"><span class="tag">التفاصيل بالشهور</span><span class="tag num">' + months.length + ' شهور</span></div></section>' +
+        '<div class="months">' + body + '</div></div>';
+    });
+  }
+
+  /* ---------------- Teacher ---------------- */
+  function renderTeacher() {
+    setTop(true);
+    if (state.teacher) return drawTeacherList();
+    var saved = SS.get('kh_key');
+    view.innerHTML = '<div class="page wrap"><section class="card">' +
+      '<h2 class="st-name" style="font-size:1.35rem">صفحة المدرس</h2>' +
+      '<p class="muted-note" style="margin:6px 0 14px">كل الطلاب، والترتيب، ومين محتاج متابعة.</p>' +
+      '<form class="form" id="tform" autocomplete="off"><label for="tpass">كلمة السر</label>' +
+      '<input class="field" id="tpass" type="password" inputmode="text" autocomplete="current-password" required>' +
+      '<button class="btn" id="tbtn" type="submit">دخول</button><p class="err" id="terr" aria-live="polite"></p></form>' +
+      (DEMO ? '<p class="muted-note">في الوضع التجريبي كلمة السر: <b class="num">1234</b></p>' : '') +
+      '</section></div>';
+    var form = $('#tform');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      login($('#tpass').value);
+    });
+    if (saved) login(saved, true); else $('#tpass').focus();
+  }
+  function login(key, silent) {
+    var btn = $('#tbtn'), err = $('#terr');
+    if (btn) { btn.disabled = true; btn.textContent = 'جارٍ الدخول…'; }
+    var seq = state.seq;
+    api('overview', { key: key }).then(function (d) {
+      if (seq !== state.seq) return;
+      if (!d || !d.ok) {
+        SS.del('kh_key');
+        if (err && !silent) err.textContent = d && d.error === 'wrong_password' ? 'كلمة السر غير صحيحة.' : 'حصلت مشكلة، حاول مرة أخرى.';
+        return;
+      }
+      SS.set('kh_key', key);
+      applySettings(d.settings);
+      state.teacher = d;
+      d.students.forEach(function (s) { state.cache[s.id] = s; });
+      drawTeacherList();
+    }).catch(function () {
+      if (err) err.textContent = 'تعذّر الاتصال. تأكد من الإنترنت.';
+    }).then(function () {
+      if (btn) { btn.disabled = false; btn.textContent = 'دخول'; }
+    });
+  }
+
+  function drawTeacherList() {
+    var all = state.teacher.students.map(function (s) { return { st: s, sum: summarize(s) }; });
+    var count = { good: 0, warn: 0, bad: 0, none: 0, unpaid: 0 };
+    all.forEach(function (x) { count[x.sum.gradeTone]++; if (x.sum.lastUnpaid) count.unpaid++; });
+    var lastMonth = (state.teacher.months || [])[state.teacher.months.length - 1] || '';
+    var F = [['all', 'الكل'], ['good', 'أخضر'], ['warn', 'أصفر'], ['bad', 'أحمر'], ['unpaid', 'لم يدفع ' + lastMonth]];
+    view.innerHTML = '<div class="page wrap">' +
+      '<section class="card"><h2 class="st-name" style="font-size:1.35rem">كل الطلاب</h2>' +
+      '<p class="muted-note">الصف الثالث الثانوي' + (lastMonth ? ' · آخر شهر: ' + esc(lastMonth) : '') + '</p>' +
+      '<div class="tiles"><div class="tile"><b>' + all.length + '</b><span>طالب</span></div>' +
+      '<div class="tile t-good"><b>' + count.good + '</b><span>أخضر</span></div>' +
+      '<div class="tile t-warn"><b>' + count.warn + '</b><span>أصفر</span></div>' +
+      '<div class="tile t-bad"><b>' + count.bad + '</b><span>أحمر</span></div></div></section>' +
+      '<div class="t-tools"><div class="filters" role="group" aria-label="تصفية">' + F.map(function (f) {
+        return '<button type="button" data-filter="' + f[0] + '" aria-pressed="' + (state.tFilter === f[0]) + '">' + esc(f[1]) +
+          (f[0] === 'unpaid' ? ' (' + count.unpaid + ')' : '') + '</button>';
+      }).join('') + '</div>' +
+      '<div class="t-row2"><input class="field" id="tq" type="search" placeholder="فلترة بالاسم…" autocomplete="off">' +
+      '<select class="field" id="tsort" aria-label="ترتيب">' +
+      '<option value="name">الاسم</option><option value="high">الأعلى درجات</option><option value="low">الأقل درجات</option><option value="absent">الأكثر غيابًا</option></select></div></div>' +
+      '<ul class="t-list" id="tlist"></ul>' +
+      '<button class="btn btn-ghost" type="button" data-act="logout">خروج من صفحة المدرس</button></div>';
+    $('#tq').value = state.tQuery;
+    $('#tsort').value = state.tSort;
+    $('#tq').addEventListener('input', function (e) { state.tQuery = e.target.value; drawTeacherRows(all); });
+    $('#tsort').addEventListener('change', function (e) { state.tSort = e.target.value; drawTeacherRows(all); });
+    view.querySelectorAll('[data-filter]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.tFilter = b.getAttribute('data-filter');
+        view.querySelectorAll('[data-filter]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        drawTeacherRows(all);
+      });
+    });
+    drawTeacherRows(all);
+  }
+  function drawTeacherRows(all) {
+    var rows = all;
+    if (state.tQuery.trim()) {
+      var hit = {};
+      KHSearch.search(KHSearch.prepare(all.map(function (x) { return x.st; })), state.tQuery, 1000).forEach(function (s) { hit[s.id] = true; });
+      rows = rows.filter(function (x) { return hit[x.st.id]; });
+    }
+    if (state.tFilter === 'unpaid') rows = rows.filter(function (x) { return x.sum.lastUnpaid; });
+    else if (state.tFilter !== 'all') rows = rows.filter(function (x) { return x.sum.gradeTone === state.tFilter; });
+    var byName = function (a, b) { return String(a.st.ar).localeCompare(String(b.st.ar), 'ar'); };
+    var g = function (x) { return x.sum.gradePct == null ? -1 : x.sum.gradePct; };
+    rows = rows.slice().sort(state.tSort === 'high' ? function (a, b) { return g(b) - g(a) || byName(a, b); }
+      : state.tSort === 'low' ? function (a, b) { return g(a) - g(b) || byName(a, b); }
+        : state.tSort === 'absent' ? function (a, b) { return b.sum.absent - a.sum.absent || byName(a, b); }
+          : byName);
+    $('#tlist').innerHTML = rows.length ? rows.map(function (x) {
+      var s = x.sum;
+      return '<li><button class="t-item" type="button" data-id="' + esc(x.st.id) + '">' +
+        '<span class="avatar" aria-hidden="true">' + esc(initial(x.st.ar)) + '</span>' +
+        '<span class="res-names"><b>' + esc(x.st.ar) + '</b>' + (x.st.en ? '<small dir="ltr">' + esc(x.st.en) + '</small>' : '') +
+        '<span class="t-pills">' + chip(s.gradeTone, 'درجات ' + pctText(s.gradePct)) + chip(s.attTone, 'حضور الحصص ' + pctText(s.attPct)) +
+        (s.lastUnpaid ? chip('bad', 'لم يدفع') : '') + '</span></span><span class="chev" aria-hidden="true">‹</span></button></li>';
+    }).join('') : '<li class="empty">لا يوجد طلاب بهذا الشرط.</li>';
+  }
+
+  /* ---------------- Events ---------------- */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('button, [data-act]');
+    if (!t) return;
+    var act = t.getAttribute('data-act');
+    if (t.classList.contains('res') || t.classList.contains('t-item')) { go({ v: 'student', id: t.getAttribute('data-id') }); return; }
+    if (act === 'months') go({ v: 'months', id: t.getAttribute('data-id') });
+    else if (act === 'back') back();
+    else if (act === 'home') { history.replaceState({ v: 'home' }, ''); render({ v: 'home' }); }
+    else if (act === 'teacher') go({ v: 'teacher' });
+    else if (act === 'clear') { state.query = ''; var q = $('#q'); if (q) { q.value = ''; q.focus(); } renderResults(); }
+    else if (act === 'logout') { SS.del('kh_key'); state.teacher = null; back(); }
+    else if (act === 'install' && deferredInstall) { deferredInstall.prompt(); deferredInstall = null; t.hidden = true; }
+    else if (act === 'retry') {
+      state.loadError = null; state.cache = {};
+      if (currentView() === 'home') { renderResults(); loadIndex(); } else render(history.state);
+    }
+  });
+
+  /* ---------------- Install hint ---------------- */
+  var deferredInstall = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredInstall = e;
+    var b = $('#installBtn');
+    if (b) b.hidden = false;
+  });
+  function installHint() {
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone;
+    if (standalone) return '';
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    return '<div class="install">' + (ios
+      ? '<b>تثبيت التطبيق على الآيفون:</b> افتح الرابط من Safari، اضغط زر المشاركة <span aria-hidden="true">⬆︎</span> ثم «إضافة إلى الشاشة الرئيسية».'
+      : '<b>تثبيت التطبيق على الموبايل:</b> من Chrome اضغط ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».') +
+      '</div><button class="btn" id="installBtn" type="button" data-act="install"' + (deferredInstall ? '' : ' hidden') + '>تثبيت التطبيق</button>';
+  }
+
+  /* ---------------- Boot ---------------- */
+  topbar.innerHTML = '<div class="wrap"><button class="back" type="button" data-act="back"><span aria-hidden="true">→</span> رجوع</button>' +
+    '<button class="top-brand" type="button" data-act="home" style="background:none;border:0;color:inherit;padding:0">' + LOGO + '<span>مس خلود حمودة</span></button></div>';
+  $('#foot').innerHTML = installHint() +
+    '<div class="foot-links"><button class="link-btn" type="button" data-act="teacher">دخول المدرس</button></div>' +
+    '<span>مس خلود حمودة · فيزياء · الصف الثالث الثانوي</span>';
+  if (DEMO) { var b = $('#demoBanner'); if (b) b.hidden = false; }
+
+  history.replaceState({ v: 'home' }, '');
+  render({ v: 'home' });
+  loadIndex();
+})();
+
+</script>
+<script>
+if ('serviceWorker' in navigator) window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+</script>
+</body>
+</html>
