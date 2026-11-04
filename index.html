@@ -294,6 +294,7 @@ button { cursor: pointer; }
 .m-quizzes li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
 .m-quizzes .q-name { font-weight: 600; flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .m-quizzes .q-score { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+.fees .chip { font-size: .86rem; padding: 4px 12px; }
 .chip { display: inline-flex; align-items: center; font-size: .8rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .chip-good { background: var(--good-bg); color: var(--good-fg); }
 .chip-warn { background: var(--warn-bg); color: var(--warn-fg); }
@@ -782,6 +783,8 @@ var KHDemo = (function () {
     return Number.isInteger(n) ? String(n) : String(Math.round(n * 10) / 10);
   }
   function money(n) { return Math.round(n).toLocaleString('en-US'); }
+  // المبلغ زي ما اتكتب في الشيت بالظبط (من غير تقريب)
+  function pounds(n) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' جنيه'; }
   function store(kind) {
     return {
       get: function (k) { try { var v = window[kind].getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
@@ -1055,6 +1058,14 @@ var KHDemo = (function () {
             : '<div class="fact fact-text"><b>—</b><span>المصاريف الشهرية<br>لم تُسجَّل بعد</span></div>') +
         '</section>' +
 
+        (function () {
+          var feeMonths = (st.months || []).filter(function (m) { return m.fee != null; });
+          if (!feeMonths.length) return '';
+          return '<section class="card"><h3 class="sec-title">المصاريف الشهرية</h3><ul class="m-quizzes fees">' + feeMonths.map(function (m) {
+            return '<li><span class="q-name">' + esc(m.name) + '</span>' + (m.fee > 0 ? chip('good', 'دفع ' + pounds(m.fee)) : chip('bad', 'لم يدفع')) + '</li>';
+          }).join('') + '</ul></section>';
+        })() +
+
         '<section class="card"><h3 class="sec-title">درجات الكويزات <small class="num">' + s.taken + ' من ' + s.quizzes.length + '</small></h3>' + quizzes + '</section>' +
 
         '<button class="cta" type="button" data-act="months" data-id="' + esc(st.id) + '">' + ICON_CAL + 'التفاصيل بالشهور</button>' +
@@ -1068,7 +1079,7 @@ var KHDemo = (function () {
       var months = st.months || [];
       var body = months.length ? months.map(function (m, i) {
         var ms = monthSummary(m);
-        var feeChip = m.fee > 0 ? chip('good', 'دفع ' + money(m.fee)) : m.fee === 0 ? chip('bad', 'لم يدفع') : chip('none', 'المصاريف لم تُسجَّل');
+        var feeChip = m.fee > 0 ? chip('good', 'دفع ' + pounds(m.fee)) : m.fee === 0 ? chip('bad', 'لم يدفع') : chip('none', 'المصاريف لم تُسجَّل');
         var gradeChip = (m.exams || []).length ? chip(ms.tone, ms.pct == null ? 'لم يمتحن' : ms.pct + '%') : chip('none', 'بدون كويزات');
         var quizList = (m.exams || []).length ? '<ul class="m-quizzes">' + m.exams.map(function (ex) {
           var p = examPct(ex);
@@ -1076,7 +1087,7 @@ var KHDemo = (function () {
             '<span class="q-score num" dir="ltr">' + (ex.status === 'taken' ? fmt(ex.score) + ' / ' + fmt(ex.max) : 'من ' + fmt(ex.max)) + '</span>' +
             (ex.status === 'taken' ? chip(tone(p, state.settings.green, state.settings.yellow), p + '%') : chip('none', 'لم يمتحن')) + '</li>';
         }).join('') + '</ul>' : '<p class="muted-note">لا توجد كويزات في هذا الشهر.</p>';
-        var feeTxt = m.fee > 0 ? money(m.fee) + ' ج' : m.fee === 0 ? 'لم يدفع' : '—';
+        var feeTxt = m.fee > 0 ? pounds(m.fee) : m.fee === 0 ? 'لم يدفع' : '—';
         return '<details class="month"' + (i === months.length - 1 ? ' open' : '') + '>' +
           '<summary><span class="m-name">' + esc(m.name) + '</span><span class="m-chips">' + gradeChip + feeChip + '</span><span class="m-caret" aria-hidden="true"></span></summary>' +
           '<div class="m-body"><div class="m-stats">' +
